@@ -18,7 +18,7 @@ from context.domains import File, Reader
 이때 텍스트를 토큰의 단위로 분할하는 작업을 토큰화라고 한다. 
 토큰의 단위는 보통 의미를 가지는 최소 의미 단위로 선정되며, 
 토큰의 단위를 단어로 잡으면 Word Tokenization이라고 하고, 
-문장으로 잡으면 Sentence Tokeniazation이라고 한다. 
+문장으로 잡으면 Sentence Tokenization이라고 한다. 
 
 영어는 주로 띄어쓰기 기준으로 나누고, 
 한글은 단어 안의 형태소를 최소 의미 단위로 인식해 적용한다.
@@ -34,7 +34,7 @@ from context.domains import File, Reader
 단어 임베딩이란 코퍼스(말뭉치)에 포함되어 있는 단어들이 각각 하나의 좌표를 가지도록 형성한 벡터공간이다.
 
 1. Preprocessing : kr-Report_2018.txt 를 읽는다.
-2. Tokenization
+2. Tokenization : 문자열(string)을 다차원 벡터(vector)로 변환
 3. Token Embedding
 4. Document Embedding
 '''
@@ -71,7 +71,7 @@ class Solution(Reader):
                 self.token_embedding()
 
             elif menu == '4':
-                self.document_embedding()
+                pass
 
             elif menu == '5':
                 self.draw_wordcloud()
@@ -81,9 +81,6 @@ class Solution(Reader):
 
             elif menu == '10':
                 self.read_stopword()
-
-            elif menu == '11':
-                self.remove_stopword()
 
             elif menu == '0':
                 break
@@ -112,9 +109,8 @@ class Solution(Reader):
             pos = self.okt.pos(i)
             _ = [j[0] for j in pos if j[1] == 'Noun']
             if len(''.join(_)) > 1:
-                noun_tokens.append(''.join(_))
-        texts = ' '.join(noun_tokens)
-        return texts
+                noun_tokens.append(' '.join(_))
+        return noun_tokens
 
     def read_stopword(self):
         self.okt.pos("삼성전자 글로벌센터 전자사업부", stem=True)
@@ -123,24 +119,29 @@ class Solution(Reader):
         path = self.new_file(file)
         with open(path, 'r', encoding='utf-8') as f:
             texts = f.read()
-        return texts
+        return texts.split()
 
-    def remove_stopword(self):
+    def token_embedding(self) -> []:
         tokens = self.tokenization()
         stopwords = self.read_stopword()
-        # ic(tokens[:50])
-        # ic(stopwords[:50])
-        texts = [i for i in tokens.split() if i not in stopwords.split()]
-        print(texts)
-
-    def token_embedding(self):
-        pass
-
-    def document_embedding(self):
-        pass
+        # ic(type(tokens))
+        # ic(type(stopwords))
+        texts = [i for i in tokens if i not in stopwords]
+        # print(texts)
+        return texts
 
     def draw_wordcloud(self):
-        pass
+        _ = self.token_embedding()
+
+        freqtxt = pd.Series(dict(FreqDist(_))).sort_values(ascending=False)
+        ic(freqtxt)
+
+        wcloud = WordCloud('./data/D2Coding.ttf', relative_scaling=0.2,
+                           background_color='white').generate(" ".join(_))
+        plt.figure(figsize=(12, 12))
+        plt.imshow(wcloud, interpolation='bilinear')
+        plt.axis('off')
+        plt.show()
 
 
 if __name__ == '__main__':

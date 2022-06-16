@@ -4,7 +4,6 @@ from urllib.parse import urljoin
 import re
 import pandas as pd
 import folium
-import googlemaps
 import numpy as np
 
 from context.domains import File, Reader
@@ -22,9 +21,9 @@ class Solution(Reader):
         def print_menu():
             print('0. Exit')
             print('1. 시카고 매거진에서 데이터 가져오기')
-            print('2. 가지고 온 데이터를 전처리하여 best_sandwiches_list_chicago.csv 만들기')
-            print('3. best_sandwiches_list_chicago.csv의 홈페이지를 통해 가격 주소 추가한 csv 만들기')
-            print('4. 주어진 데이터를 활용하여 시카고 샌드위치 맛집 현황지도(폴리움)를 작성하시오')
+            print('2. 가지고 온 데이터를 전처리하여 best_sandwiches_list_chicago.csv 생성')
+            print('3. best_sandwiches_list_chicago.csv의 "URL"컬럼을 통해 가격 주소 추가한 csv 생성')
+            print('4. 주어진 데이터를 활용하여 시카고 샌드위치 맛집 현황지도(폴리움)를 작성')
             return input('메뉴 선택 \n')
 
         while 1:
