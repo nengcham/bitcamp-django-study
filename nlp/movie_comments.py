@@ -68,6 +68,7 @@ class Solution(Reader):
                 self.naive_bayes_classifier('망작 쓰레기 다신 안볼것 같다')
                 self.naive_bayes_classifier('어느정도 볼만은 했다')
                 self.naive_bayes_classifier('너무 좋아요. 내 인생의 최고의 명작 영화')
+                self.naive_bayes_classifier('형편없는 영화였다. 보다가 졸았다.')
 
             elif menu == '0':
                 break
@@ -424,7 +425,7 @@ class Solution(Reader):
         # ic(self.word_probs)
 
     def classify(self, doc):
-        print(f'댓글: "{doc}", 선플점수: {round(self.class0_probabilities(self.word_probs, doc)*100, 2)}점')
+        print(f'댓글: "{doc}", 긍정점수: {round(self.class0_probabilities(self.word_probs, doc)*100, 2)}점')
 
 
 if __name__ == '__main__':
